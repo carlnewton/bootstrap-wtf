@@ -1,17 +1,18 @@
 {% set text_field_types = 'DateField', 'DateTimeField', 'DecimalField', 'FloatField', 'IntegerField', 'PasswordField', 'SelectField', 'SelectMultipleField', 'StringField', 'TextAreaField', 'TextField' %}
 {% set other_field_types = 'BooleanField', 'FileField', 'RadioField', 'SubmitField' %}
 
-{% macro bootstrap_form(form, form_groups=True, placeholders=True, labels=True, errors=True) -%}
+{% macro bootstrap_form(form, form_groups=True, placeholders=True, labels=True, errors=True, horizontal=False) -%}
     {% for field in form -%}
-        {% if field.type in text_field_types or field.type in other_field_types %}
-            {{ bootstrap_field(field, form_groups, placeholders, labels, errors) }}
-        {% else %}
+        {% if field.type in text_field_types or field.type in other_field_types -%}
+            {{ bootstrap_field(field, form_groups, placeholders, labels, errors, horizontal) }}
+        {%- else -%}
             {{ field }}
-        {% endif %}
+        {%- endif %}
     {%- endfor %}
 {%- endmacro %}
 
-{% macro bootstrap_field(field, form_group=True, placeholder=True, label=True, errors=True) -%}
+{% macro bootstrap_field(field, form_group=True, placeholder=True, label=True, errors=True, horizontal=False) %}
+
     {% set class_value = False %}
     {%- if field.type in text_field_types -%}
         {% set class_value = 'form-control' %}
@@ -25,10 +26,24 @@
     {%- endif -%}
 
     {%- if label -%}
-        {% set field_label = field.label %}
+        {% if horizontal -%}
+            {% set field_label = field.label(class_='col-sm-2 control-label') %}
+        {%- else -%}
+            {% set field_label = field.label(class_='control-label') %}
+        {%- endif %}
     {%- endif -%}
 
     {% set field_output = field(class_=class_value, placeholder=placeholder_value) %}
+
+    {%- if horizontal %}
+        {%- if field.errors -%}
+             {% set field_output = field_output + '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="sr-only">(error)</span>'|safe %}
+        {%- endif %}
+
+        {%- if field.type not in ['SubmitField', 'BooleanField'] -%}
+            {% set field_output = '<div class="col-sm-10">'|safe + field_output + '</div>'|safe %}
+        {%- endif %}
+    {%- endif -%}
 
     {%- if field.type == 'BooleanField' -%}
         {% set field_output = '<div class="checkbox"><label>'|safe + field_output|safe + ' ' + field.label.text + '</label></div>'|safe %}
@@ -36,10 +51,16 @@
         {% set field_output = field_label|safe + field_output|safe %}
     {%- endif -%}
 
+    {% if horizontal -%}
+        {% if field.type in ['SubmitField', 'BooleanField'] -%}
+            {% set field_output = '<div class="col-sm-offset-2 col-sm-10">'|safe + field_output|safe + '</div>'|safe %}
+        {%- endif %}
+    {%- endif -%}
+
     {% set form_group_classes = 'form-group' %}
     {%- if field.errors -%}
         {% set form_group_classes = form_group_classes + ' has-error has-feedback' %}
-        {%- if form_group -%}
+        {%- if form_group and not horizontal -%}
             {% set field_output = field_output + '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="sr-only">(error)</span>'|safe %}
         {%- endif -%}
     {%- endif -%}
@@ -54,6 +75,9 @@
         {{ field_output }}
 
         {%- if field.errors and errors -%}
+            {% if horizontal -%}
+                <div class="col-sm-offset-2">
+            {% endif %}
             <div class="alert alert-danger" role="alert">
                 {%- if field.errors|count == 1 -%}
                     <p>{{ field.errors[0] }}</p>
@@ -65,6 +89,9 @@
                     </ul>
                 {%- endif %}
             </div>
+            {%- if horizontal -%}
+                </div>
+            {%- endif %}
         {%- endif -%}
     {%- endif -%}
 {%- endmacro %}
