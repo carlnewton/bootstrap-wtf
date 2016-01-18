@@ -3,7 +3,7 @@
 
 {% macro bootstrap_form(form, form_groups=True, placeholders=True, labels=True, errors=True, horizontal=False) -%}
     {% for field in form -%}
-        {% if field.type in text_field_types or field.type in other_field_types -%}
+        {% if field.type in (text_field_types + other_field_types) -%}
             {{ bootstrap_field(field, form_groups, placeholders, labels, errors, horizontal) }}
         {%- else -%}
             {{ field }}
