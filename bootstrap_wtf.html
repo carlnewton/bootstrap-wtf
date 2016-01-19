@@ -37,23 +37,23 @@
 
     {%- if horizontal %}
         {%- if field.errors -%}
-             {% set field_output = field_output + '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="sr-only">(error)</span>'|safe %}
+             {% set field_output = field_output + '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="sr-only">(error)</span>' %}
         {%- endif %}
 
         {%- if field.type not in ['SubmitField', 'BooleanField'] -%}
-            {% set field_output = '<div class="col-sm-10">'|safe + field_output + '</div>'|safe %}
+            {% set field_output = '<div class="col-sm-10">%s</div>' % field_output %}
         {%- endif %}
     {%- endif -%}
 
     {%- if field.type == 'BooleanField' -%}
-        {% set field_output = '<div class="checkbox"><label>'|safe + field_output|safe + ' ' + field.label.text + '</label></div>'|safe %}
+        {% set field_output = '<div class="checkbox"><label>%s %s</label></div>' % (field_output, field.label.text) %}
     {%- elif field.type != 'SubmitField' -%}
-        {% set field_output = field_label|safe + field_output|safe %}
+        {% set field_output = field_label + field_output %}
     {%- endif -%}
 
     {% if horizontal -%}
         {% if field.type in ['SubmitField', 'BooleanField'] -%}
-            {% set field_output = '<div class="col-sm-offset-2 col-sm-10">'|safe + field_output|safe + '</div>'|safe %}
+            {% set field_output = '<div class="col-sm-offset-2 col-sm-10">%s</div>' % field_output %}
         {%- endif %}
     {%- endif -%}
 
@@ -61,7 +61,7 @@
     {%- if field.errors -%}
         {% set form_group_classes = form_group_classes + ' has-error has-feedback' %}
         {%- if form_group and not horizontal -%}
-            {% set field_output = field_output + '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="sr-only">(error)</span>'|safe %}
+            {% set field_output = field_output + '<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="sr-only">(error)</span>' %}
         {%- endif -%}
     {%- endif -%}
 
@@ -70,13 +70,13 @@
     {%- endif -%}
 
     {%- if form_group -%}
-        {% set field_output = '<div class="'|safe + form_group_classes + '">'|safe + field_output + '</div>'|safe %}
+        {% set field_output = '<div class="%s">%s</div>' % (form_group_classes, field_output) %}
     {%- endif -%}
 
     {%- if field.type == 'HiddenField' -%}
         {{ field }}
     {%- else -%}
-        {{ field_output }}
+        {{ field_output|safe }}
 
         {%- if field.errors and errors -%}
             {% if horizontal -%}
