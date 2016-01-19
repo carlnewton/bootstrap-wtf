@@ -65,6 +65,10 @@
         {%- endif -%}
     {%- endif -%}
 
+    {%- if field.flags.required -%}
+        {% set form_group_classes = form_group_classes + ' required' %}
+    {%- endif -%}
+
     {%- if form_group -%}
         {% set field_output = '<div class="'|safe + form_group_classes + '">'|safe + field_output + '</div>'|safe %}
     {%- endif -%}
