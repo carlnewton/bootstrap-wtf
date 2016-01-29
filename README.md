@@ -49,6 +49,6 @@ Hiding placeholders and enabling the horizontal layout for all fields:
 | `horizontal`   | False         | Uses Bootstrap grid classes to display the label to the left of the field. It is necessary to apply the `form-horizontal` class to the form for this to appear correctly. |
 
 #### Example
-Hiding labels and errors for a field:
+Hiding the label and errors for a field:
 
-    {{ b_wtf.bootstrap_field(form.date_of_birth, label=False,errors=False) }}
+    {{ b_wtf.bootstrap_field(form.date_of_birth, label=False, errors=False) }}

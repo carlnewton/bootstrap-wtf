@@ -78,6 +78,16 @@
     {%- else -%}
         {{ field_output|safe }}
 
+        {%- if field.description -%}
+            {% if horizontal -%}
+                <div class="col-sm-offset-2 col-sm-10">
+            {%- endif -%}
+            <p class="help-block">{{ field.description }}</p>
+            {%- if horizontal -%}
+                </div>
+            {%- endif -%}
+        {%- endif %}
+
         {%- if field.errors and errors -%}
             {% if horizontal -%}
                 <div class="col-sm-offset-2">
