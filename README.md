@@ -1,5 +1,11 @@
 # Bootstrap WTF
-Jinja macros for creating WTForms that use Bootstrap's styles and components
+Jinja macros for creating WTForms that use Bootstrap's styles and components.
+
+## Requirements
+
+* [Bootstrap](https://github.com/twbs/bootstrap)
+* [WTForms](https://github.com/wtforms/wtforms)
+* [Jinja2](https://github.com/mitsuhiko/jinja2)
 
 ## Usage
 

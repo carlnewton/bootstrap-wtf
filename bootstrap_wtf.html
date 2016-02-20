@@ -47,7 +47,7 @@
 
     {%- if field.type == 'BooleanField' -%}
         {% set field_output = '<div class="checkbox"><label>%s %s</label></div>' % (field_output, field.label.text) %}
-    {%- elif field.type != 'SubmitField' -%}
+    {%- elif field.type != 'SubmitField' and label -%}
         {% set field_output = field_label + field_output %}
     {%- endif -%}
 
@@ -80,7 +80,7 @@
 
         {%- if field.description -%}
             {% if horizontal -%}
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-10 col-sm-offset-2">
             {%- endif -%}
             <p class="help-block">{{ field.description }}</p>
             {%- if horizontal -%}
@@ -90,19 +90,17 @@
 
         {%- if field.errors and errors -%}
             {% if horizontal -%}
-                <div class="col-sm-offset-2">
+                <div class="col-sm-10 col-sm-offset-2">
             {% endif %}
-            <div class="alert alert-danger" role="alert">
-                {%- if field.errors|count == 1 -%}
-                    <p>{{ field.errors[0] }}</p>
-                {%- else -%}
-                    <ul>
-                    {%- for error in field.errors -%}
-                        <li>{{ error }}</li>
-                    {%- endfor -%}
-                    </ul>
-                {%- endif %}
-            </div>
+            {%- if field.errors|count == 1 -%}
+                <p class="text-danger">{{ field.errors[0] }}</p>
+            {%- else -%}
+                <ul>
+                {%- for error in field.errors -%}
+                    <li class="text-danger">{{ error }}</li>
+                {%- endfor -%}
+                </ul>
+            {%- endif %}
             {%- if horizontal -%}
                 </div>
             {%- endif %}
